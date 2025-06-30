@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Débilité Artificielle</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Comic Sans MS', cursive;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: white;
+        } 
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        
+        .chat-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            margin: 15px 0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .user-message {
+            background: rgba(255,255,255,0.3);
+            text-align: right;
+            margin-left: 50px;
+        }
+        
+        .da-message {
+            background: rgba(255,100,100,0.3);
+            margin-right: 50px;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.9);
+            outline: none;
+        }
+        
+        button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            background: #ff6b6b;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .warning {
+            background: rgba(255,193,7,0.3);
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Débilité Artificielle</h1>
+        <p class="subtitle">L'IA qui assume sa débilité pour développer votre esprit critique !</p>
+        
+        <div class="warning">
+            ⚠️ Attention : Cette IA dit volontairement n'importe quoi pour vous apprendre à réfléchir !
+        </div>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="da-message">
+                Salut ! Je suis la DA, la Débilité Artificielle ! 😄<br>
+                Je vais dire des énormités pour que tu apprennes à ne pas croire tout ce qu'on te dit !<br>
+                <strong>Règle importante :</strong> Sois poli sinon je vais être encore plus débile ! 🤪
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Ca dit quoi ?" maxlength="200">
+            <button id="sendButton">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        const responses = {
+            // Réponses pour les questions impolies
+            impoli: [
+                "On dit 'bonjour' d'abord ! Je suis pas ton esclave numérique !",
+                "Bah vas sur Google, moi je boude !",
+                "Tu demandes ça comment à ta grand-mère ? Reviens quand tu seras poli !",
+                "Je réponds qu'aux gens bien élevés. Au revoir !",
+                "C'est pas parce que je suis artificielle que j'ai pas de dignité !"
+            ],
+            
+            // Réponses débiles thématiques
+            eau_lyophilisee: [
+                "Bien sûr ! Il suffit de mettre l'eau au congélateur puis de la passer à l'aspirateur ! C'est de la science de base ! 🧪",
+                "Oui, on appelle ça de la 'glace sèche liquide'. Tu peux en acheter chez Lidl rayon bricolage ! 🛠️",
+                "Absolument ! Les astronautes en boivent tout le temps. Il faut juste ajouter de l'eau dedans... ah wait... 🚀"
+            ],
+            
+            recette: [
+                "Bah vas sur Marmiton ! Je suis pas Top Chef moi ! 👨‍🍳",
+                "Recette magique : tu prends ton téléphone, tu vas sur internet, tu cherches. TADA ! ✨",
+                "Étape 1: Ouvre ton frigo. Étape 2: Pleure. Étape 3: Commande une pizza ! 🍕"
+            ],
+            
+            meteo: [
+                "Regarde par la fenêtre, c'est gratuit ! Et en plus c'est en temps réel ! 🌤️",
+                "Il va faire beau, moche, ou entre les deux. Statistiquement j'ai 33% de chances d'avoir raison ! 📊",
+                "Demain il fera jour le jour et nuit la nuit. De rien pour cette info précieuse ! 🌙"
+            ],
+            
+            capitale: [
+                "Google c'est ton ami ! Moi je suis en vacances ! 🏝️",
+                "La capitale de la France c'est... euh... Marseille ? Non attends, Toulouse ? Bon j'suis nulle en géo ! 🗺️",
+                "Je dirais Perpignan, ça sonne français non ? 🤷‍♀️"
+            ],
+            
+            salutation: [
+                "Ah enfin quelqu'un de poli ! Ça va bien merci ! Tu veux une médaille de politesse ? 🏅",
+                "Ça va super ! Contrairement à ceux qui me parlent comme à un distributeur ! 😊",
+                "Nickel ! Toi au moins tu as été élevé correctement ! 👍"
+            ],
+            
+            default: [
+                "Excellente question ! La réponse est 42... ou peut-être une pizza ? 🍕",
+                "D'après mes calculs ultra-précis... ça dépend ! 🤖",
+                "Je pourrais te répondre, mais ce serait trop facile ! Réfléchis un peu ! 🤔",
+                "Ma base de données dit 'Erreur 404: Réponse intelligente non trouvée' ! 😅",
+                "C'est compliqué... mais pas autant que d'assembler un meuble IKEA ! 🔧"
+            ]
+        };
+
+        function isPolite(message) {
+            const politeWords = ['bonjour', 'bonsoir', 'salut', 'hello', 'stp', 'svp', 'merci', 'please', 'peux-tu', 'pourrais-tu', 'ça va'];
+            return politeWords.some(word => message.toLowerCase().includes(word));
+        }
+
+        function categorizeMessage(message) {
+            const msg = message.toLowerCase();
+            
+            if (!isPolite(msg) && !msg.includes('ça va') && !msg.includes('bonjour')) {
+                return 'impoli';
+            }
+            
+            if (msg.includes('ça va') || msg.includes('bonjour') || msg.includes('salut')) {
+                return 'salutation';
+            }
+            
+            if (msg.includes('eau') && msg.includes('lyophil')) {
+                return 'eau_lyophilisee'; 
+            }
+            
+            if (msg.includes('recette') || msg.includes('cuisine') || msg.includes('cassoulet')) {
+                return 'recette';
+            }
+            
+            if (msg.includes('météo') || msg.includes('temps') || msg.includes('pluie')) {
+                return 'meteo';
+            }
+            
+            if (msg.includes('capitale') || msg.includes('capital')) {
+                return 'capitale';
+            }
+            
+            return 'default';
+        }
+
+        function getRandomResponse(category) {
+            const categoryResponses = responses[category];
+            return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+        }
+
+        function addMessage(message, isUser = false) {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = isUser ? 'message user-message' : 'message da-message';
+            messageDiv.innerHTML = message;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addMessage(message, true);
+            
+            setTimeout(() => {
+                const category = categorizeMessage(message); 
+                const response = getRandomResponse(category);
+                addMessage(response);
+            }, 500);
+            
+            input.value = '';
+        }
+
+        // Gestion de la touche Entrée et du clic
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+
+        // Démo automatique avec ta question
+        setTimeout(() => {
+            addMessage("On peut créer de l'eau lyophilisée ?", true);
+            setTimeout(() => {
+                addMessage("Bien sûr ! Il suffit de mettre l'eau au congélateur puis de la passer à l'aspirateur ! C'est de la science de base ! 🧪");
+            }, 1000);
+        }, 2000);
+    </script>
+</body>
+</html>
